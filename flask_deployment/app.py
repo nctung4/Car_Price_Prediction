@@ -1,0 +1,930 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Mon May 24 10:07:25 2021
+
+@author: nctung4
+"""
+
+from flask import Flask, request, jsonify, render_template
+import requests
+import pickle
+import numpy as np
+
+app = Flask(__name__,template_folder='template')
+model = pickle.load(open('../model/model.pkl','rb'))
+scaler = pickle.load(open('../model/scaler.pkl','rb'))
+
+@app.route('/')
+def home():
+    return render_template('index.html')
+
+@app.route('/predict', methods=['GET','POST'])
+def predict():
+    if request.method == 'POST':
+        
+        km = int(request.form['km'])
+        trunk = float(request.form['trunk'])
+        cylinder = int(request.form['cylinder'])
+        power = int(request.form['power'])
+        hp = int(request.form['hp'])
+        
+        brand=request.form['brand']
+        if(brand=='audi'):
+            Brand_AUDI = 1
+            Brand_BMW = 0
+            Brand_CHEVROLET = 0
+            Brand_CITROEN = 0
+            Brand_DACIA = 0
+            Brand_FIAT = 0
+            Brand_FORD = 0
+            Brand_HONDA = 0
+            Brand_HYUNDAI = 0
+            Brand_KIA = 0
+            Brand_MAZDA = 0
+            Brand_MERCEDES_BENZ = 0
+            Brand_MINI = 0
+            Brand_MITSUBISHI = 0
+            Brand_NISSAN = 0
+            Brand_OPEL = 0
+            Brand_PEUGEOT = 0
+            Brand_RENAULT = 0
+            Brand_SEAT = 0
+            Brand_SKODA = 0
+            Brand_SMART = 0
+            Brand_SUZUKI = 0
+            Brand_TOYOTA = 0
+            Brand_VOLKSWAGEN = 0
+            Brand_VOLVO = 0
+        elif (brand=='bmw'):
+            Brand_AUDI = 0
+            Brand_BMW = 1
+            Brand_CHEVROLET = 0
+            Brand_CITROEN = 0
+            Brand_DACIA = 0
+            Brand_FIAT = 0
+            Brand_FORD = 0
+            Brand_HONDA = 0
+            Brand_HYUNDAI = 0
+            Brand_KIA = 0
+            Brand_MAZDA = 0
+            Brand_MERCEDES_BENZ = 0
+            Brand_MINI = 0
+            Brand_MITSUBISHI = 0
+            Brand_NISSAN = 0
+            Brand_OPEL = 0
+            Brand_PEUGEOT = 0
+            Brand_RENAULT = 0
+            Brand_SEAT = 0
+            Brand_SKODA = 0
+            Brand_SMART = 0
+            Brand_SUZUKI = 0
+            Brand_TOYOTA = 0
+            Brand_VOLKSWAGEN = 0
+            Brand_VOLVO = 0   
+        elif (brand=='chevrolet'):
+            Brand_AUDI = 0
+            Brand_BMW = 0
+            Brand_CHEVROLET = 1
+            Brand_CITROEN = 0
+            Brand_DACIA = 0
+            Brand_FIAT = 0
+            Brand_FORD = 0
+            Brand_HONDA = 0
+            Brand_HYUNDAI = 0
+            Brand_KIA = 0
+            Brand_MAZDA = 0
+            Brand_MERCEDES_BENZ = 0
+            Brand_MINI = 0
+            Brand_MITSUBISHI = 0
+            Brand_NISSAN = 0
+            Brand_OPEL = 0
+            Brand_PEUGEOT = 0
+            Brand_RENAULT = 0
+            Brand_SEAT = 0
+            Brand_SKODA = 0
+            Brand_SMART = 0
+            Brand_SUZUKI = 0
+            Brand_TOYOTA = 0
+            Brand_VOLKSWAGEN = 0
+            Brand_VOLVO = 0  
+             
+        elif (brand=='citroen'):
+            Brand_AUDI = 0
+            Brand_BMW = 0
+            Brand_CHEVROLET = 0
+            Brand_CITROEN = 1
+            Brand_DACIA = 0
+            Brand_FIAT = 0
+            Brand_FORD = 0
+            Brand_HONDA = 0
+            Brand_HYUNDAI = 0
+            Brand_KIA = 0
+            Brand_MAZDA = 0
+            Brand_MERCEDES_BENZ = 0
+            Brand_MINI = 0
+            Brand_MITSUBISHI = 0
+            Brand_NISSAN = 0
+            Brand_OPEL = 0
+            Brand_PEUGEOT = 0
+            Brand_RENAULT = 0
+            Brand_SEAT = 0
+            Brand_SKODA = 0
+            Brand_SMART = 0
+            Brand_SUZUKI = 0
+            Brand_TOYOTA = 0
+            Brand_VOLKSWAGEN = 0
+            Brand_VOLVO = 0               
+            
+        elif (brand=='dacia'):
+            Brand_AUDI = 0
+            Brand_BMW = 0
+            Brand_CHEVROLET = 0
+            Brand_CITROEN = 0
+            Brand_DACIA = 1
+            Brand_FIAT = 0
+            Brand_FORD = 0
+            Brand_HONDA = 0
+            Brand_HYUNDAI = 0
+            Brand_KIA = 0
+            Brand_MAZDA = 0
+            Brand_MERCEDES_BENZ = 0
+            Brand_MINI = 0
+            Brand_MITSUBISHI = 0
+            Brand_NISSAN = 0
+            Brand_OPEL = 0
+            Brand_PEUGEOT = 0
+            Brand_RENAULT = 0
+            Brand_SEAT = 0
+            Brand_SKODA = 0
+            Brand_SMART = 0
+            Brand_SUZUKI = 0
+            Brand_TOYOTA = 0
+            Brand_VOLKSWAGEN = 0
+            Brand_VOLVO = 0  
+        elif (brand=='fiat'):
+            Brand_AUDI = 0
+            Brand_BMW = 0
+            Brand_CHEVROLET = 0
+            Brand_CITROEN = 0
+            Brand_DACIA = 0
+            Brand_FIAT = 1
+            Brand_FORD = 0
+            Brand_HONDA = 0
+            Brand_HYUNDAI = 0
+            Brand_KIA = 0
+            Brand_MAZDA = 0
+            Brand_MERCEDES_BENZ = 0
+            Brand_MINI = 0
+            Brand_MITSUBISHI = 0
+            Brand_NISSAN = 0
+            Brand_OPEL = 0
+            Brand_PEUGEOT = 0
+            Brand_RENAULT = 0
+            Brand_SEAT = 0
+            Brand_SKODA = 0
+            Brand_SMART = 0
+            Brand_SUZUKI = 0
+            Brand_TOYOTA = 0
+            Brand_VOLKSWAGEN = 0
+            Brand_VOLVO = 0   
+        elif (brand=='ford'):
+            Brand_AUDI = 0
+            Brand_BMW = 0
+            Brand_CHEVROLET = 0
+            Brand_CITROEN = 0
+            Brand_DACIA = 0
+            Brand_FIAT = 0
+            Brand_FORD = 1
+            Brand_HONDA = 0
+            Brand_HYUNDAI = 0
+            Brand_KIA = 0
+            Brand_MAZDA = 0
+            Brand_MERCEDES_BENZ = 0
+            Brand_MINI = 0
+            Brand_MITSUBISHI = 0
+            Brand_NISSAN = 0
+            Brand_OPEL = 0
+            Brand_PEUGEOT = 0
+            Brand_RENAULT = 0
+            Brand_SEAT = 0
+            Brand_SKODA = 0
+            Brand_SMART = 0
+            Brand_SUZUKI = 0
+            Brand_TOYOTA = 0
+            Brand_VOLKSWAGEN = 0
+            Brand_VOLVO = 0   
+        elif (brand=='honda'):
+            Brand_AUDI = 0
+            Brand_BMW = 0
+            Brand_CHEVROLET = 0
+            Brand_CITROEN = 0
+            Brand_DACIA = 0
+            Brand_FIAT = 0
+            Brand_FORD = 0
+            Brand_HONDA = 1
+            Brand_HYUNDAI = 0
+            Brand_KIA = 0
+            Brand_MAZDA = 0
+            Brand_MERCEDES_BENZ = 0
+            Brand_MINI = 0
+            Brand_MITSUBISHI = 0
+            Brand_NISSAN = 0
+            Brand_OPEL = 0
+            Brand_PEUGEOT = 0
+            Brand_RENAULT = 0
+            Brand_SEAT = 0
+            Brand_SKODA = 0
+            Brand_SMART = 0
+            Brand_SUZUKI = 0
+            Brand_TOYOTA = 0
+            Brand_VOLKSWAGEN = 0
+            Brand_VOLVO = 0   
+        elif (brand=='hyundai'):
+            Brand_AUDI = 0
+            Brand_BMW = 0
+            Brand_CHEVROLET = 0
+            Brand_CITROEN = 0
+            Brand_DACIA = 0
+            Brand_FIAT = 0
+            Brand_FORD = 0
+            Brand_HONDA = 0
+            Brand_HYUNDAI = 1
+            Brand_KIA = 0
+            Brand_MAZDA = 0
+            Brand_MERCEDES_BENZ = 0
+            Brand_MINI = 0
+            Brand_MITSUBISHI = 0
+            Brand_NISSAN = 0
+            Brand_OPEL = 0
+            Brand_PEUGEOT = 0
+            Brand_RENAULT = 0
+            Brand_SEAT = 0
+            Brand_SKODA = 0
+            Brand_SMART = 0
+            Brand_SUZUKI = 0
+            Brand_TOYOTA = 0
+            Brand_VOLKSWAGEN = 0
+            Brand_VOLVO = 0   
+        elif (brand=='kia'):
+            Brand_AUDI = 0
+            Brand_BMW = 0
+            Brand_CHEVROLET = 0
+            Brand_CITROEN = 0
+            Brand_DACIA = 0
+            Brand_FIAT = 0
+            Brand_FORD = 0
+            Brand_HONDA = 0
+            Brand_HYUNDAI = 0
+            Brand_KIA = 1
+            Brand_MAZDA = 0
+            Brand_MERCEDES_BENZ = 0
+            Brand_MINI = 0
+            Brand_MITSUBISHI = 0
+            Brand_NISSAN = 0
+            Brand_OPEL = 0
+            Brand_PEUGEOT = 0
+            Brand_RENAULT = 0
+            Brand_SEAT = 0
+            Brand_SKODA = 0
+            Brand_SMART = 0
+            Brand_SUZUKI = 0
+            Brand_TOYOTA = 0
+            Brand_VOLKSWAGEN = 0
+            Brand_VOLVO = 0   
+        elif (brand=='mazda'):
+            Brand_AUDI = 0
+            Brand_BMW = 0
+            Brand_CHEVROLET = 0
+            Brand_CITROEN = 0
+            Brand_DACIA = 0
+            Brand_FIAT = 0
+            Brand_FORD = 0
+            Brand_HONDA = 0
+            Brand_HYUNDAI = 0
+            Brand_KIA = 0
+            Brand_MAZDA = 1
+            Brand_MERCEDES_BENZ = 0
+            Brand_MINI = 0
+            Brand_MITSUBISHI = 0
+            Brand_NISSAN = 0
+            Brand_OPEL = 0
+            Brand_PEUGEOT = 0
+            Brand_RENAULT = 0
+            Brand_SEAT = 0
+            Brand_SKODA = 0
+            Brand_SMART = 0
+            Brand_SUZUKI = 0
+            Brand_TOYOTA = 0
+            Brand_VOLKSWAGEN = 0
+            Brand_VOLVO = 0   
+        elif (brand=='mercedes'):
+            Brand_AUDI = 0
+            Brand_BMW = 0
+            Brand_CHEVROLET = 0
+            Brand_CITROEN = 0
+            Brand_DACIA = 0
+            Brand_FIAT = 0
+            Brand_FORD = 0
+            Brand_HONDA = 0
+            Brand_HYUNDAI = 0
+            Brand_KIA = 0
+            Brand_MAZDA = 0
+            Brand_MERCEDES_BENZ = 1
+            Brand_MINI = 0
+            Brand_MITSUBISHI = 0
+            Brand_NISSAN = 0
+            Brand_OPEL = 0
+            Brand_PEUGEOT = 0
+            Brand_RENAULT = 0
+            Brand_SEAT = 0
+            Brand_SKODA = 0
+            Brand_SMART = 0
+            Brand_SUZUKI = 0
+            Brand_TOYOTA = 0
+            Brand_VOLKSWAGEN = 0
+            Brand_VOLVO = 0   
+        elif (brand=='mini'):
+            Brand_AUDI = 0
+            Brand_BMW = 0
+            Brand_CHEVROLET = 0
+            Brand_CITROEN = 0
+            Brand_DACIA = 0
+            Brand_FIAT = 0
+            Brand_FORD = 0
+            Brand_HONDA = 0
+            Brand_HYUNDAI = 0
+            Brand_KIA = 0
+            Brand_MAZDA = 0
+            Brand_MERCEDES_BENZ = 0
+            Brand_MINI = 1
+            Brand_MITSUBISHI = 0
+            Brand_NISSAN = 0
+            Brand_OPEL = 0
+            Brand_PEUGEOT = 0
+            Brand_RENAULT = 0
+            Brand_SEAT = 0
+            Brand_SKODA = 0
+            Brand_SMART = 0
+            Brand_SUZUKI = 0
+            Brand_TOYOTA = 0
+            Brand_VOLKSWAGEN = 0
+            Brand_VOLVO = 0   
+        elif (brand=='mitsubishi'):
+            Brand_AUDI = 0
+            Brand_BMW = 0
+            Brand_CHEVROLET = 0
+            Brand_CITROEN = 0
+            Brand_DACIA = 0
+            Brand_FIAT = 0
+            Brand_FORD = 0
+            Brand_HONDA = 0
+            Brand_HYUNDAI = 0
+            Brand_KIA = 0
+            Brand_MAZDA = 0
+            Brand_MERCEDES_BENZ = 0
+            Brand_MINI = 0
+            Brand_MITSUBISHI = 1
+            Brand_NISSAN = 0
+            Brand_OPEL = 0
+            Brand_PEUGEOT = 0
+            Brand_RENAULT = 0
+            Brand_SEAT = 0
+            Brand_SKODA = 0
+            Brand_SMART = 0
+            Brand_SUZUKI = 0
+            Brand_TOYOTA = 0
+            Brand_VOLKSWAGEN = 0
+            Brand_VOLVO = 0   
+        elif (brand=='nissan'):
+            Brand_AUDI = 0
+            Brand_BMW = 0
+            Brand_CHEVROLET = 0
+            Brand_CITROEN = 0
+            Brand_DACIA = 0
+            Brand_FIAT = 0
+            Brand_FORD = 0
+            Brand_HONDA = 0
+            Brand_HYUNDAI = 0
+            Brand_KIA = 0
+            Brand_MAZDA = 0
+            Brand_MERCEDES_BENZ = 0
+            Brand_MINI = 0
+            Brand_MITSUBISHI = 0
+            Brand_NISSAN = 1
+            Brand_OPEL = 0
+            Brand_PEUGEOT = 0
+            Brand_RENAULT = 0
+            Brand_SEAT = 0
+            Brand_SKODA = 0
+            Brand_SMART = 0
+            Brand_SUZUKI = 0
+            Brand_TOYOTA = 0
+            Brand_VOLKSWAGEN = 0
+            Brand_VOLVO = 0   
+        elif (brand=='opel'):
+            Brand_AUDI = 0
+            Brand_BMW = 0
+            Brand_CHEVROLET = 0
+            Brand_CITROEN = 0
+            Brand_DACIA = 0
+            Brand_FIAT = 0
+            Brand_FORD = 0
+            Brand_HONDA = 0
+            Brand_HYUNDAI = 0
+            Brand_KIA = 0
+            Brand_MAZDA = 0
+            Brand_MERCEDES_BENZ = 0
+            Brand_MINI = 0
+            Brand_MITSUBISHI = 0
+            Brand_NISSAN = 0
+            Brand_OPEL = 1
+            Brand_PEUGEOT = 0
+            Brand_RENAULT = 0
+            Brand_SEAT = 0
+            Brand_SKODA = 0
+            Brand_SMART = 0
+            Brand_SUZUKI = 0
+            Brand_TOYOTA = 0
+            Brand_VOLKSWAGEN = 0
+            Brand_VOLVO = 0   
+        elif (brand=='peugeot'):
+            Brand_AUDI = 0
+            Brand_BMW = 0
+            Brand_CHEVROLET = 0
+            Brand_CITROEN = 0
+            Brand_DACIA = 0
+            Brand_FIAT = 0
+            Brand_FORD = 0
+            Brand_HONDA = 0
+            Brand_HYUNDAI = 0
+            Brand_KIA = 0
+            Brand_MAZDA = 0
+            Brand_MERCEDES_BENZ = 0
+            Brand_MINI = 0
+            Brand_MITSUBISHI = 0
+            Brand_NISSAN = 0
+            Brand_OPEL = 0
+            Brand_PEUGEOT = 1
+            Brand_RENAULT = 0
+            Brand_SEAT = 0
+            Brand_SKODA = 0
+            Brand_SMART = 0
+            Brand_SUZUKI = 0
+            Brand_TOYOTA = 0
+            Brand_VOLKSWAGEN = 0
+            Brand_VOLVO = 0   
+        elif (brand=='renault'):
+            Brand_AUDI = 0
+            Brand_BMW = 0
+            Brand_CHEVROLET = 0
+            Brand_CITROEN = 0
+            Brand_DACIA = 0
+            Brand_FIAT = 0
+            Brand_FORD = 0
+            Brand_HONDA = 0
+            Brand_HYUNDAI = 0
+            Brand_KIA = 0
+            Brand_MAZDA = 0
+            Brand_MERCEDES_BENZ = 0
+            Brand_MINI = 0
+            Brand_MITSUBISHI = 0
+            Brand_NISSAN = 0
+            Brand_OPEL = 0
+            Brand_PEUGEOT = 0
+            Brand_RENAULT = 1
+            Brand_SEAT = 0
+            Brand_SKODA = 0
+            Brand_SMART = 0
+            Brand_SUZUKI = 0
+            Brand_TOYOTA = 0
+            Brand_VOLKSWAGEN = 0
+            Brand_VOLVO = 0   
+        elif (brand=='seat'):
+            Brand_AUDI = 0
+            Brand_BMW = 0
+            Brand_CHEVROLET = 0
+            Brand_CITROEN = 0
+            Brand_DACIA = 0
+            Brand_FIAT = 0
+            Brand_FORD = 0
+            Brand_HONDA = 0
+            Brand_HYUNDAI = 0
+            Brand_KIA = 0
+            Brand_MAZDA = 0
+            Brand_MERCEDES_BENZ = 0
+            Brand_MINI = 0
+            Brand_MITSUBISHI = 0
+            Brand_NISSAN = 0
+            Brand_OPEL = 0
+            Brand_PEUGEOT = 0
+            Brand_RENAULT = 0
+            Brand_SEAT = 1
+            Brand_SKODA = 0
+            Brand_SMART = 0
+            Brand_SUZUKI = 0
+            Brand_TOYOTA = 0
+            Brand_VOLKSWAGEN = 0
+            Brand_VOLVO = 0   
+        elif (brand=='skoda'):
+            Brand_AUDI = 0
+            Brand_BMW = 0
+            Brand_CHEVROLET = 0
+            Brand_CITROEN = 0
+            Brand_DACIA = 0
+            Brand_FIAT = 0
+            Brand_FORD = 0
+            Brand_HONDA = 0
+            Brand_HYUNDAI = 0
+            Brand_KIA = 0
+            Brand_MAZDA = 0
+            Brand_MERCEDES_BENZ = 0
+            Brand_MINI = 0
+            Brand_MITSUBISHI = 0
+            Brand_NISSAN = 0
+            Brand_OPEL = 0
+            Brand_PEUGEOT = 0
+            Brand_RENAULT = 0
+            Brand_SEAT = 0
+            Brand_SKODA = 1
+            Brand_SMART = 0
+            Brand_SUZUKI = 0
+            Brand_TOYOTA = 0
+            Brand_VOLKSWAGEN = 0
+            Brand_VOLVO = 0   
+        elif (brand=='smart'):
+            Brand_AUDI = 0
+            Brand_BMW = 0
+            Brand_CHEVROLET = 0
+            Brand_CITROEN = 0
+            Brand_DACIA = 0
+            Brand_FIAT = 0
+            Brand_FORD = 0
+            Brand_HONDA = 0
+            Brand_HYUNDAI = 0
+            Brand_KIA = 0
+            Brand_MAZDA = 0
+            Brand_MERCEDES_BENZ = 0
+            Brand_MINI = 0
+            Brand_MITSUBISHI = 0
+            Brand_NISSAN = 0
+            Brand_OPEL = 0
+            Brand_PEUGEOT = 0
+            Brand_RENAULT = 0
+            Brand_SEAT = 0
+            Brand_SKODA = 0
+            Brand_SMART = 1
+            Brand_SUZUKI = 0
+            Brand_TOYOTA = 0
+            Brand_VOLKSWAGEN = 0
+            Brand_VOLVO = 0   
+        elif (brand=='suzuki'):
+            Brand_AUDI = 0
+            Brand_BMW = 0
+            Brand_CHEVROLET = 0
+            Brand_CITROEN = 0
+            Brand_DACIA = 0
+            Brand_FIAT = 0
+            Brand_FORD = 0
+            Brand_HONDA = 0
+            Brand_HYUNDAI = 0
+            Brand_KIA = 0
+            Brand_MAZDA = 0
+            Brand_MERCEDES_BENZ = 0
+            Brand_MINI = 0
+            Brand_MITSUBISHI = 0
+            Brand_NISSAN = 0
+            Brand_OPEL = 0
+            Brand_PEUGEOT = 0
+            Brand_RENAULT = 0
+            Brand_SEAT = 0
+            Brand_SKODA = 0
+            Brand_SMART = 0
+            Brand_SUZUKI = 1
+            Brand_TOYOTA = 0
+            Brand_VOLKSWAGEN = 0
+            Brand_VOLVO = 0   
+        elif (brand=='toyota'):
+            Brand_AUDI = 0
+            Brand_BMW = 0
+            Brand_CHEVROLET = 0
+            Brand_CITROEN = 0
+            Brand_DACIA = 0
+            Brand_FIAT = 0
+            Brand_FORD = 0
+            Brand_HONDA = 0
+            Brand_HYUNDAI = 0
+            Brand_KIA = 0
+            Brand_MAZDA = 0
+            Brand_MERCEDES_BENZ = 0
+            Brand_MINI = 0
+            Brand_MITSUBISHI = 0
+            Brand_NISSAN = 0
+            Brand_OPEL = 0
+            Brand_PEUGEOT = 0
+            Brand_RENAULT = 0
+            Brand_SEAT = 0
+            Brand_SKODA = 0
+            Brand_SMART = 0
+            Brand_SUZUKI = 0
+            Brand_TOYOTA = 1
+            Brand_VOLKSWAGEN = 0
+            Brand_VOLVO = 0   
+        elif (brand=='volkswagen'):
+            Brand_AUDI = 0
+            Brand_BMW = 0
+            Brand_CHEVROLET = 0
+            Brand_CITROEN = 0
+            Brand_DACIA = 0
+            Brand_FIAT = 0
+            Brand_FORD = 0
+            Brand_HONDA = 0
+            Brand_HYUNDAI = 0
+            Brand_KIA = 0
+            Brand_MAZDA = 0
+            Brand_MERCEDES_BENZ = 0
+            Brand_MINI = 0
+            Brand_MITSUBISHI = 0
+            Brand_NISSAN = 0
+            Brand_OPEL = 0
+            Brand_PEUGEOT = 0
+            Brand_RENAULT = 0
+            Brand_SEAT = 0
+            Brand_SKODA = 0
+            Brand_SMART = 0
+            Brand_SUZUKI = 0
+            Brand_TOYOTA = 0
+            Brand_VOLKSWAGEN = 1
+            Brand_VOLVO = 0   
+        elif (brand=='volvo'):
+            Brand_AUDI = 0
+            Brand_BMW = 0
+            Brand_CHEVROLET = 0
+            Brand_CITROEN = 0
+            Brand_DACIA = 0
+            Brand_FIAT = 0
+            Brand_FORD = 0
+            Brand_HONDA = 0
+            Brand_HYUNDAI = 0
+            Brand_KIA = 0
+            Brand_MAZDA = 0
+            Brand_MERCEDES_BENZ = 0
+            Brand_MINI = 0
+            Brand_MITSUBISHI = 0
+            Brand_NISSAN = 0
+            Brand_OPEL = 0
+            Brand_PEUGEOT = 0
+            Brand_RENAULT = 0
+            Brand_SEAT = 0
+            Brand_SKODA = 0
+            Brand_SMART = 0
+            Brand_SUZUKI = 0
+            Brand_TOYOTA = 0
+            Brand_VOLKSWAGEN = 0
+            Brand_VOLVO = 1 
+        else:
+            Brand_AUDI = 0
+            Brand_BMW = 0
+            Brand_CHEVROLET = 0
+            Brand_CITROEN = 0
+            Brand_DACIA = 0
+            Brand_FIAT = 0
+            Brand_FORD = 0
+            Brand_HONDA = 0
+            Brand_HYUNDAI = 0
+            Brand_KIA = 0
+            Brand_MAZDA = 0
+            Brand_MERCEDES_BENZ = 0
+            Brand_MINI = 0
+            Brand_MITSUBISHI = 0
+            Brand_NISSAN = 0
+            Brand_OPEL = 0
+            Brand_PEUGEOT = 0
+            Brand_RENAULT = 0
+            Brand_SEAT = 0
+            Brand_SKODA = 0
+            Brand_SMART = 0
+            Brand_SUZUKI = 0
+            Brand_TOYOTA = 0
+            Brand_VOLKSWAGEN = 0
+            Brand_VOLVO = 0   
+        
+        year=request.form['year']
+        if (year=='2011'):
+            Year_2012 = 0
+            Year_2013 = 0
+            Year_2014 = 0
+            Year_2015 = 0
+            Year_2016 = 0
+            Year_2017 = 0
+            Year_2018 = 0
+            Year_2019 = 0
+        elif (year =='2012'):
+            Year_2012 = 1
+            Year_2013 = 0
+            Year_2014 = 0
+            Year_2015 = 0
+            Year_2016 = 0
+            Year_2017 = 0
+            Year_2018 = 0
+            Year_2019 = 0
+        elif (year =='2013'):
+            Year_2012 = 0
+            Year_2013 = 1
+            Year_2014 = 0
+            Year_2015 = 0
+            Year_2016 = 0
+            Year_2017 = 0
+            Year_2018 = 0
+            Year_2019 = 0
+        elif (year =='2014'):
+            Year_2012 = 0
+            Year_2013 = 0
+            Year_2014 = 1
+            Year_2015 = 0
+            Year_2016 = 0
+            Year_2017 = 0
+            Year_2018 = 0
+            Year_2019 = 0
+        elif (year =='2015'):
+            Year_2012 = 0
+            Year_2013 = 0
+            Year_2014 = 0
+            Year_2015 = 1
+            Year_2016 = 0
+            Year_2017 = 0
+            Year_2018 = 0
+            Year_2019 = 0
+        elif (year =='2016'):
+            Year_2012 = 0
+            Year_2013 = 0
+            Year_2014 = 0
+            Year_2015 = 0
+            Year_2016 = 1
+            Year_2017 = 0
+            Year_2018 = 0
+            Year_2019 = 0
+        elif (year =='2017'):
+            Year_2012 = 0
+            Year_2013 = 0
+            Year_2014 = 0
+            Year_2015 = 0
+            Year_2016 = 0
+            Year_2017 = 1
+            Year_2018 = 0
+            Year_2019 = 0
+        elif (year =='2018'):
+            Year_2012 = 0
+            Year_2013 = 0
+            Year_2014 = 0
+            Year_2015 = 0
+            Year_2016 = 0
+            Year_2017 = 0
+            Year_2018 = 1
+            Year_2019 = 0
+        else:
+            Year_2012 = 0
+            Year_2013 = 0
+            Year_2014 = 0
+            Year_2015 = 0
+            Year_2016 = 0
+            Year_2017 = 0
+            Year_2018 = 0
+            Year_2019 = 1
+            
+        condition = request.form['condition']
+        if(condition=='serulesmentes'):
+            Condition_Megkimelt = 0
+            Condition_Normal = 0
+            Condition_Serulesmentes = 1
+            Condition_ujszeru = 0
+        elif(condition=='kituno'):
+            Condition_Megkimelt = 0
+            Condition_Normal = 0
+            Condition_Serulesmentes = 0
+            Condition_ujszeru = 0    
+        elif(condition=='megkimelt'):
+            Condition_Megkimelt = 1
+            Condition_Normal = 0
+            Condition_Serulesmentes = 0
+            Condition_ujszeru = 0 
+        elif(condition=='normal'):
+            Condition_Megkimelt = 0
+            Condition_Normal = 1
+            Condition_Serulesmentes = 0
+            Condition_ujszeru = 0 
+        elif(condition=='ujszeru'):
+            Condition_Megkimelt = 0
+            Condition_Normal = 0
+            Condition_Serulesmentes = 0
+            Condition_ujszeru = 1
+            
+        design=request.form['design']
+        if(design=='kombi'):
+            Design_egyteru = 0
+            Design_ferde = 0
+            Design_Kisbusz = 0
+            Design_Kombi = 1
+            Design_Sedan = 0
+            Design_varosi = 0
+        elif(design=='ferde'):
+            Design_egyteru = 0
+            Design_ferde = 1
+            Design_Kisbusz = 0
+            Design_Kombi = 0
+            Design_Sedan = 0
+            Design_varosi = 0
+        elif(design=='egyter'):
+            Design_egyteru = 1
+            Design_ferde = 0
+            Design_Kisbusz = 0
+            Design_Kombi = 0
+            Design_Sedan = 0
+            Design_varosi = 0
+        elif(design=='sedan'):
+            Design_egyteru = 0
+            Design_ferde = 0
+            Design_Kisbusz = 0
+            Design_Kombi = 0
+            Design_Sedan = 1
+            Design_varosi = 0
+        elif(design=='kisbusz'):
+            Design_egyteru = 0
+            Design_ferde = 0
+            Design_Kisbusz = 1
+            Design_Kombi = 0
+            Design_Sedan = 0
+            Design_varosi = 0
+        elif(design=='cabrio'):
+            Design_egyteru = 0
+            Design_ferde = 0
+            Design_Kisbusz = 0
+            Design_Kombi = 0
+            Design_Sedan = 0
+            Design_varosi = 0
+        else:
+            Design_egyteru = 0
+            Design_ferde = 0
+            Design_Kisbusz = 0
+            Design_Kombi = 0
+            Design_Sedan = 0
+            Design_varosi = 1   
+        
+        aircon=request.form['aircon']
+        if (aircon == 'digital'):
+            AirCon_Type_short_digital = 1
+            AirCon_Type_short_manual = 0
+        elif (aircon =='manual'):
+            AirCon_Type_short_digital = 0
+            AirCon_Type_short_manual = 1
+        else:
+            AirCon_Type_short_digital = 0
+            AirCon_Type_short_manual = 0
+        
+        fuel = request.form['fuel']
+        if (fuel=='dizel'):
+            Fuel_dizel = 1
+            Fuel_Elektromos = 0
+            Fuel_Hibrid = 0
+            Fuel_Hibrid_dizel = 0
+        elif (fuel=='benzin'):
+            Fuel_dizel = 0
+            Fuel_Elektromos = 0
+            Fuel_Hibrid = 0
+            Fuel_Hibrid_dizel = 0
+        elif (fuel=='elektromos'):
+            Fuel_dizel = 0
+            Fuel_Elektromos = 1
+            Fuel_Hibrid = 0
+            Fuel_Hibrid_dizel = 0
+        elif (fuel=='hibrid'):
+            Fuel_dizel = 0
+            Fuel_Elektromos = 0
+            Fuel_Hibrid = 1
+            Fuel_Hibrid_dizel = 0
+        else:
+            Fuel_dizel = 0
+            Fuel_Elektromos = 0
+            Fuel_Hibrid = 0
+            Fuel_Hibrid_dizel = 1
+        
+        gearbox = request.form['gearbox']
+        if (gearbox == 'manual'):
+            Gearbox_short_manualis = 1
+            Gearbox_short_szekvencialis = 0
+        elif (gearbox == 'automata'):
+            Gearbox_short_manualis = 0
+            Gearbox_short_szekvencialis = 0
+        else:
+            Gearbox_short_manualis = 0
+            Gearbox_short_szekvencialis = 1
+        
+        scaled_arr = scaler.transform([[km,trunk,cylinder,power,hp]])
+        dummy_arr = np.array([[Brand_AUDI,Brand_BMW,Brand_CHEVROLET,Brand_CITROEN,Brand_DACIA,Brand_FIAT,Brand_FORD,Brand_HONDA,Brand_HYUNDAI,Brand_KIA,Brand_MAZDA,Brand_MERCEDES_BENZ,Brand_MINI,Brand_MITSUBISHI,Brand_NISSAN,Brand_OPEL,Brand_PEUGEOT,Brand_RENAULT,Brand_SEAT,Brand_SKODA,Brand_SMART,Brand_SUZUKI,Brand_TOYOTA,Brand_VOLKSWAGEN,Brand_VOLVO,Year_2012,Year_2013,Year_2014,Year_2015,Year_2016,Year_2017,Year_2018,Year_2019,Condition_Megkimelt,Condition_Normal,Condition_Serulesmentes,Condition_ujszeru,Design_egyteru,Design_ferde,Design_Kisbusz,Design_Kombi,Design_Sedan,Design_varosi,AirCon_Type_short_digital,AirCon_Type_short_manual,Fuel_dizel,Fuel_Elektromos,Fuel_Hibrid,Fuel_Hibrid_dizel,Gearbox_short_manualis,Gearbox_short_szekvencialis]])
+        prediction_arr = np.hstack((scaled_arr, dummy_arr))
+        
+        prediction=model.predict(prediction_arr)
+        output=round(prediction[0],2)
+        return render_template('index.html', prediction_text='Car price prediction: {} HUF'.format(output))
+
+if __name__ == '__main__':
+    app.run(debug=True)

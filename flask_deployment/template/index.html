@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="hu">
+
+<head>
+  <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap.min.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <meta name="msapplication-TileColor" content="#da532c">
+  <meta name="theme-color" content="#ffffff">
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Car Price Prediction</title>
+</head>
+
+
+<body>
+  <div class="login-page">
+    <div class="form">
+      <h2>Predict car price</h2>
+      <form class="login" action='/predict' method="POST">
+        <input type="number" name="km" placeholder="Kilometers" />
+        <input type="number" name="trunk" placeholder="Trunk (liter)" />
+        <input type="number" name="cylinder" placeholder="Cylinder (cm^3)" />
+        <input type="number" name="power" placeholder="Power (kW)" />
+        <input type="number" name="hp" placeholder="Horse Power" />
+
+        <p><b>Manufacturer:</b>
+        <select name='brand'>
+            <option value='audi'>Audi</option>
+            <option value='alfa'>Alfa Romeo</option>
+            <option value='bmw'>BMW</option>
+            <option value='chevrolet'>Chevrolet</option>
+            <option value='citroen'>Citroen</option>
+            <option value='dacia'>Dacia</option>
+            <option value='fiat'>Fiat</option>
+            <option value='ford'>Ford</option>
+            <option value='honda'>Honda</option>
+            <option value='hyundai'>Hyundai</option>
+            <option value='kia'>Kia</option>
+            <option value='mazda'>Mazda</option>
+            <option value='mercedes'>Mercedes-Benz</option>
+            <option value='mini'>Mini</option>
+            <option value='mitsubishi'>Mitsubishi</option>
+            <option value='nissan'>Nissan</option>
+            <option value='opel'>Opel</option>
+            <option value='peugeot'>Peugeot</option>
+            <option value='renault'>Renault</option>
+            <option value='seat'>Seat</option>
+            <option value='skoda'>Skoda</option>
+            <option value='smart'>Smart</option>
+            <option value='suzuki'>Suzuki</option>
+            <option value='toyota'>Toyota</option>
+            <option value='volkswagen'>Volkswagen</option>
+            <option value='volvo'>Volvo</option>
+        </select>
+        </p>
+
+        <p><b>Year:</b>
+            <select name='year'>
+                <option value='2011'>2011</option>
+                <option value='2012'>2012</option>
+                <option value='2013'>2013</option>
+                <option value='2014'>2014</option>
+                <option value='2015'>2015</option>
+                <option value='2016'>2016</option>
+                <option value='2017'>2017</option>
+                <option value='2018'>2018</option>
+                <option value='2019'>2019</option>
+            </select>
+            </p>
+        
+        <p><b>Condition:</b></p>
+            <input type="radio" class="radiogomb" id="serulesment" name="condition" value="serulesmentes"><label for="serulesment">Sérülésmentes</label><br>
+            <input type="radio" class="radiogomb" id="kituno" name="condition" value="kituno"><label for="kituno">Kitűnő</label><br>
+            <input type="radio" class="radiogomb" id="megkimelt" name="condition" value="megkimelt"><label for="megkimelt">Megkímélt</label><br>
+            <input type="radio" class="radiogomb" id="normal" name="condition" value="normal"><label for="normal">Normál</label><br>
+            <input type="radio" class="radiogomb" id="ujszeru" name="condition" value="ujszeru"><label for="ujszeru">Újszerű</label>
+
+        <p><b>Design:</b></p>
+            <input type="radio" class="radiogomb" id="kombi" name="design" value="kombi"><label for="kombi">Kombi</label><br>
+            <input type="radio" class="radiogomb" id="ferde" name="design" value="ferde"><label for="ferde">Ferdehátú</label><br>
+            <input type="radio" class="radiogomb" id="egyter" name="design" value="egyter"><label for="egyter">Egyterű</label><br>
+            <input type="radio" class="radiogomb" id="sedan" name="design" value="sedan"><label for="sedan">Sedan</label><br>
+            <input type="radio" class="radiogomb" id="kisbusz" name="design" value="kisbusz"><label for="kisbusz">Kisbusz</label><br>
+            <input type="radio" class="radiogomb" id="cabrio" name="design" value="cabrio"><label for="cabrio">Cabrio</label><br>
+            <input type="radio" class="radiogomb" id="varosi" name="design" value="varosi"><label for="varosi">Városi terepjáró</label>
+
+        <p><b>Air Condition type:</b></p>
+            <input type="radio" class="radiogomb" id="digital" name="aircon" value="digital"><label for="digital">Digitális</label><br>
+            <input type="radio" class="radiogomb" id="manual" name="aircon" value="manual"><label for="manual">Manuális</label><br>
+            <input type="radio" class="radiogomb" id="automata" name="aircon" value="automata"><label for="automata">Automata</label>
+            
+        <p><b>Fuel type:</b></p>
+            <input type="radio" class="radiogomb" id="dizel" name="fuel" value="dizel"><label for="dizel">Dízel</label><br>
+            <input type="radio" class="radiogomb" id="benzin" name="fuel" value="benzin"><label for="benzin">Benzin</label><br>
+            <input type="radio" class="radiogomb" id="elektromos" name="fuel" value="elektromos"><label for="elektromos">Elektromos</label><br>          
+            <input type="radio" class="radiogomb" id="hibrid" name="fuel" value="hibrid"><label for="hibrid">Hibrid</label><br>
+            <input type="radio" class="radiogomb" id="hibriddizel" name="fuel" value="hibriddizel"><label for="hibriddizel">Hibrid Dízel</label>
+
+        <p><b>Gearbox type:</b></p>
+            <input type="radio" class="radiogomb" id="manualis" name="gearbox" value="manual"><label for="manualis">Manuális</label><br>
+            <input type="radio" class="radiogomb" id="automat" name="gearbox" value="automata"><label for="automat">Automata</label><br>
+            <input type="radio" class="radiogomb" id="szekvencia" name="gearbox" value="szekvencia"><label for="szekvencia">Szekvenciális</label><br>          
+
+
+
+        <p><input type="submit" class="gomb" name="calculate" value="Calculate"></p>
+      </form>
+      {% autoescape false %}
+        <p>{{ prediction_text }}</p>
+      {% endautoescape %}
+    </div>
+  </div>
+
+</body>
+</html>
