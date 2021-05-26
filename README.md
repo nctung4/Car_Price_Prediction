@@ -46,11 +46,10 @@ In the website, 1 car information looks like this:
 I collected 350 cars data, looped through 50 pages. I managed to make the looping by changing the URL query parameters. I used the dictionary data structure to collect these data, and after 1 car I appended the dict into a list. 
 
 #### Data preparation
-The final scraped dataframe looked like this:
-
-![](df.head() screenshot)
 
 Several data cleaning procedures was applied in this phase, such as parsing the data to the right type, or getting the essential information within 1 cell.
+
+The notebook for this section can be found [here].(https://github.com/nctung4/Car_Price_Prediction/blob/main/1_Data_preparation.ipynb)
 
 #### EDA
 In this section the main goal is to summarize the variables main characteristics. One of the most important thing to check at first, is the distribution of the numerical variables, and the relationship with the other variables through a scatter plot.
