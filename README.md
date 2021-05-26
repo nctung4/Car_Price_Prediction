@@ -49,7 +49,7 @@ I collected 350 cars data, looped through 50 pages. I managed to make the loopin
 
 Several data cleaning procedures was applied in this phase, such as parsing the data to the right type, or getting the essential information within 1 cell.
 
-The notebook for this section can be found [here].(https://github.com/nctung4/Car_Price_Prediction/blob/main/1_Data_preparation.ipynb)
+The notebook for this section can be found [here](https://github.com/nctung4/Car_Price_Prediction/blob/main/1_Data_preparation.ipynb).
 
 #### EDA
 In this section the main goal is to summarize the variables main characteristics. One of the most important thing to check at first, is the distribution of the numerical variables, and the relationship with the other variables through a scatter plot.
@@ -74,7 +74,7 @@ I also checked that what kind of manufacturers are available in this specific pr
 
 ![](https://github.com/nctung4/Car_Price_Prediction/blob/main/plots/manufacturer.png)
 
-For more information check the [notebook].(https://github.com/nctung4/Car_Price_Prediction/blob/main/2_EDA.ipynb)
+For more information check the [notebook](https://github.com/nctung4/Car_Price_Prediction/blob/main/2_EDA.ipynb).
 
 #### Model building
 In the model building part I tried 4 models. 
