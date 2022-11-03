@@ -3,11 +3,11 @@
 This project is a end-to-end data science project, from data collecting, to making it into production.
 
 ### Project Overview
-* Created a tool that estimates car prices (RMSE:~293K, MAE:~293K HUF) to help people negotiate or estimate the specific price, when they want to either buy or sell a car.
+* Created a tool that estimates car prices to help people negotiate or estimate the specific price, when they want to either buy or sell a car. 
 * Used web scraping techniques to get the data from [hasznaltauto.hu](https://www.hasznaltauto.hu/). (hungarian car trading website)
-* Applied several data cleaning and feature engineering techniques, such as handling missing data or feature scaling
-* Optimized multiple linear regression, support vector regression, random forest regression, and xgboost.
-* Build a client facing API using flask, and deployed it using heroku (PAAS): https://nctung-car-price-pred.herokuapp.com/
+* Applied several data cleaning and feature engineering techniques.
+* Optimized a linear regression, lasso regression, MLP and an XGBoost model.
+* Built a client facing API using flask, and deployed it using heroku (PAAS): https://nctung-car-price-pred.herokuapp.com/
 
 ### Resources used
 **Python Version:** 3.8.5 <br>
@@ -32,7 +32,7 @@ I am not a car expert, and I always wondered how much my car would worth at the 
 * I scraped the data using the **selenium** and **beautifulsoup** libraries.
 * I cleaned the data using **pandas**.
 * I used several visualization techniques, to perform EDA.
-* In the model building part I optimized 4 models. **Linear Regression**, **SVR**, **Random Forest Regression**, and **XGBoost**.
+* In the model building part I optimized 4 models. **Linear Regression**, **Lasso regression**, **MLP**, and **XGBoost**.
 * Build a client facing API using **Flask**, and deployed it in **heroku**.
 
 ### Major Insights
@@ -79,11 +79,11 @@ For more information check the [notebook](https://github.com/nctung4/Car_Price_P
 #### Model building
 In the model building part I tried 4 models. 
 
+Before training my dataset, I applied several feature engineering techniques, for instance handling outliers, handling missing data, generalizing the dataset. I also applied some feature selection techniques before modeling, such as filtering, and embedded feature selection.
+
 Evaluation summary table:
 
 ![](https://github.com/nctung4/Car_Price_Prediction/blob/main/plots/eval.png)
-
-The Linear Regression had the best performance, with an approximately 70% adjusted R^2.
 
 In case of linear regression, it is essential after the modeling, to check whether the 5 assumptions are met in our case. The 5 assumptions are:
 1. Linear relationship
